@@ -86,6 +86,66 @@
   * 统一将需要的所有icon字体全部导出
   * 导出的内容会包括html的demo文件，可以查看具体的使用方式，如`<i class="会在demo文件中给出"></i>`，其中需要先引入导出的css文件，由于在i后添加了`::before`，会在添加的css中进行处理进而显示对应的iconfont图标内容
 
+### 二.行高
+
+#### 1.行高的构成
+
+* 行高设置的元素`line-height`
+
+* 实例代码
+
+  ```html
+  <span style="line-height:20px">inline box 01</span>
+  <span style="line-height:20px">inline box 02</span>
+  <span style="line-height:20px">inline box 03</span>
+  <span style="line-height:30px">inline box 04</span>
+  ```
+
+  * 页面显示代码可以看到四个inline box元素显示在同一行，渲染高度一样
+  * 原因：line-height只会撑开当前inline元素的整体行高，即实际当前此行的行高为30px
+
+* 整个inline-box的底部是bottom底线，字母的最下部分是基线，inline-box的顶部是top顶线
+
+#### 2.行高相关的现象和处理方案
+
+* 实例代码01
+
+  ```html
+  <div style="border:solid 1px red;">
+      <span style="background: blue; color: #fff; font-size: 20px; line-height: 60px">元素内容</span>
+  </div>
+  ```
+
+  * span的背景区域是根据字体大小(底线与顶线)决定的
+  * 上述代码可以看到div的高度是60px，span的高度是20px(因为是由字体的顶线与底线决定的)，超出的40px将分布到span上下两侧
+
+* 实例代码02
+
+  ```html
+  <div>
+      <span style="font-size:10px;">第一段</span>
+      <span style="font-size:20px;">第二段</span>
+      <span style="font-size:30px;">第三段</span>
+  </div>
+  ```
+
+  * 上述代码可以看到一行中的三段文字是基于基线对齐的
+  * 如果想基于底线对齐则:`vertical-align:bottom;`，基于顶线对齐:`vertical-align: top`，居中对齐:`vertical-align:middle`
+  * vertical-align默认是base-line像素，如果想上移指定像素则直接赋值像素值即可
+
+* 实例代码03**【图片3px缝隙问题—面试题】**
+
+  ```html
+  <div>
+      <span>文本</span>
+      <img src="test.jpg"/>
+  </div>
+  ```
+
+  * 上述代码在页面中显示时会发现图片下有一行空白缝隙
+  * 原因：img是inline元素，遵守行高构成，默认基于基线对齐(base-line)，基线对齐即元素下方还会与容器有一部分空隙的
+  * 可以通过设置img的style样式`vertical-align: bottom`基于底线对齐，则会实现消除缝隙
+
 ### 二.背景
 
 > 未完待续...
