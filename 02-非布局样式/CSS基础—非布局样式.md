@@ -146,9 +146,71 @@
   * 原因：img是inline元素，遵守行高构成，默认基于基线对齐(base-line)，基线对齐即元素下方还会与容器有一部分空隙的
   * 可以通过设置img的style样式`vertical-align: bottom`基于底线对齐，则会实现消除缝隙
 
-### 二.背景
+### 三.背景
 
-> 未完待续...
+#### 1.背景颜色
+
+* 设置背景采用background属性
+* background属性值
+  * 颜色英文名: `eg.white/black`
+  * 颜色色号RGB: `eg.#FF0000 -> 等同于 #F00`
+  * `hsl(色相,饱和度,亮度)`: eg.`hsl(0, 100%, 50%)`
+  * `hsla(色相,饱和度,亮度,透明度)`: eg.`hsla(0, 100%, 50%, .3)`设置为0.3的透明度
+  * rgb: eg.`rgb(255, 0, 0)`相当于FF0000
+  * rgba: eg.`rgba(255,0,0,.3)` 
+
+#### 2.渐变色背景
+
+* 实例代码
+
+  ```css
+  .c {
+      background: -webkit-linear-gradient(left, red, green); //线性渐变,从左开始从红到绿
+      background: linear-gradient(to right, red, green); //新写法的线性渐变,从左开始从红到绿
+      background: linear-gradient(0deg, red, green); //角度的线性渐变,0deg表示从下到上,90deg表示从左往右
+      background: linear-gradient(135deg, red 0, green 50%, blue 100%); //多颜色渐变
+  }
+  ```
+
+#### 3.多背景叠加
+
+* 实例代码
+
+  ```css
+  .c {
+      background: linear-gradient(135deg, transparent 0, transparent 49.5%, green 49.5% green 50.5%, transparent 50.5%, transparent 100%),
+          linear-gradient(45deg, transparent 0, transparent 49.5%, blue 49.5% blue 50.5%, transparent 50.5%, transparent 100%);
+      background-size: 30px 30px;
+      // 通过设置两个背景叠加实现网格效果，都是在百分比为49.5到50.5期间绘制带颜色线,且通过background-size设置一个背景的区间，如果一行有120px，则会出现4对交叉线
+  }
+  ```
+
+#### 4.背景图片和属性（雪碧图）
+
+* 实例代码
+
+  ```css
+  .c {
+      height: 900px;//设置尺寸高度
+      background: red url(./test.png);//如果单设这一个属性则当背景图小于900px时会出现多个平铺的背景图占满height
+      background-repeat: no-repeat;//设置背景不可平铺,则会只显示一个背景图,其余颜色为红色遮盖
+      background-position: center; //设置背景图的位置,可以设置为center/top...或是指定距左距上像素位置
+      background-size: 100px 20px;//如果背景图足够大,但不希望显示那么大的背景图时可以通过此属性设置背景图大小
+  }
+  ```
+
+* **CSS雪碧图**是用来做性能优化的，如我们在一个页面上显示三个图片内容，我们可以将三个图片内容拼接到一个图片中，并在页面中通过背景图片切割的方式设置要显示的部分，这样就是请求一个图片即可完成所有的操作
+
+#### 5.base64进行性能优化
+
+* base64实质是一个文本
+* 可以通过将图片变成base64编码来引用，可以通过转码的方式获得对应的图片文本，并将对应的文本填写到background属性中即可显示。如:`background: url(data:image/png;base64,xxxxxxx)`
+* 优点: 减少http请求连接数
+* 缺点: 会增大图片的体积(增大约1/3)；通过我们会将image文件单存，但如果这样使用会增大css文件体积，故通常我们会用此方式显示图标；增大了解码消耗
+
+#### 6.多分辨率适配
+
+* 在多分辨率适配方面，手机上通常1px会有多个像素点去占用，会使得图片模糊，我们可以通过设置`background-size`属性值缩小背景的大小，这样在手机端就可以显示的更加清楚了
 
 ### 三.边框
 
